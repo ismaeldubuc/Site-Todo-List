@@ -23,6 +23,13 @@ const addTodo = () => {
     done: false,
     createdAt: new Date().getTime(),
   })
+
+  input_content.value = ''
+  input_category.value = null
+}
+
+const removeTodo = todo => {
+  todos.value = todos.value.filter(t => t !== todo)
 }
 
 watch(todos, (newVal) => (
@@ -45,15 +52,15 @@ onMounted(() => {
 
     <section class="greeting">
       <h2 class="title">
-        Quoi de neuf, <input type="text" placeholder="Name here" v-model="name" />
+        Quoi de neuf, <input type="text" placeholder="votre prénom ici" v-model="name" />
       </h2>
     </section>
 
     <section class="create-todo">
-      <h3>CREER UNE TACHE</h3>
+      <h3>CRÉER UNE TÂCHE</h3>
 
       <form @submit.prevent="addTodo">
-        <h4>De quoi est composé votre liste des tâches ?</h4>
+        <h4>De quoi est composé votre tâche ?</h4>
         <input 
           type="text" 
           placeholder="ex: faire une vidéo" 
@@ -89,7 +96,28 @@ onMounted(() => {
       </form>
     </section>
 
-    {{ todos_asc }}
+    <section class="todo-list">
+      <h3>LISTE DES TÂCHES :</h3>
+        <div class="list">
+
+          <div v-for="todo in todos_asc" :class="`todo-item ${todo.done && 'done'}`">
+
+            <label>
+              <input type="checkbox" v-model="todo.done" />
+              <span :class="`bubble ${todo.category}`"></span>
+            </label>
+
+            <div class="todo-content">
+              <input type="text" v-model="todo.content" />
+            </div>
+
+            <div class="actions">
+              <button class="delete" @click="removeTodo(todo)">Supprimer</button>
+            </div>
+
+          </div>
+        </div>
+    </section>
   </main>
 
 </template>
